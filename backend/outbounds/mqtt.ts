@@ -1,6 +1,7 @@
 import {connect} from "mqtt"
+import { data } from "../global/data";
 
-const PORT = 15393
+const PORT = 13800
 const HOST = "tcp://0.tcp.ap.ngrok.io:" + PORT
 
 export default function CreateClient(topic: string){
@@ -17,8 +18,10 @@ export default function CreateClient(topic: string){
 
     client.subscribe(topic, {qos: 0});
 
-    client.on('message', function (_topic, message) {
-        console.log(message.toString());
+    client.on('message', function (topic, message) {
+        if (topic === 'status'){
+            data.push(message.toString());
+        }
     });
 
     client.on('close', () => {
