@@ -1,11 +1,10 @@
 import {connect} from "mqtt"
 import { data } from "../global/data";
 
-const PORT = 13800
+const PORT = 15714
 const HOST = "tcp://0.tcp.ap.ngrok.io:" + PORT
 
 export default function CreateClient(topic: string){
-    console.log(HOST);
     const client = connect(HOST);
     client.on('error', (err) => {
         console.log(err);

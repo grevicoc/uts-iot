@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import CreateClient from "./outbounds/mqtt";
 import { calculateRunTime, meanRunTime } from "./services/insight";
 import { data } from "./global/data";
+import cors from 'cors';
 
 const PORT = 3663;
 
@@ -11,12 +12,18 @@ const jsonParser = bodyParser.json();
 
 const client = CreateClient("status");
 
+const corsOptions ={
+  origin:'*', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200,
+}
+
+app.use(cors(corsOptions));
+
 app.use(jsonParser);
 
 app.get("/status", (req, res) => {
   const errorMsg = meanRunTime(data) > 0.5 ? "Device is up for too long!" : null;
-  console.log(meanRunTime(data))
-  console.log(data);
   return res.json({
     data: data[data.length-1] ?? null,
     message: errorMsg
@@ -26,11 +33,9 @@ app.get("/status", (req, res) => {
 app.post("/status", (req, res) => {
   const { command } = req.body;
   if (command === 'on'){
-    console.log(command);
     client.publish('change', '1');
   }
   if (command === 'off'){
-    console.log("here!");
     client.publish('change', '0');
   }
 

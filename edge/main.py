@@ -25,7 +25,7 @@ print("Wifi Connected!")
 
 # MQTT settings
 MQTT_SERVER = "tcp://0.tcp.ap.ngrok.io"
-MQTT_PORT = 13800
+MQTT_PORT = 15714
 MQTT_TOPIC = "status"
 
 client_id = ubinascii.hexlify(machine.unique_id()).decode()
@@ -57,3 +57,4 @@ while True:
     print("Published message: ", message)
 
     time.sleep(1)
+
